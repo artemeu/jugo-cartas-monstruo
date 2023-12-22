@@ -29,6 +29,11 @@ class Monstruo {
             alert(`${this.nombre} no puede atacar, ya que no tiene puntos de ataque.`);
         }
     }
+
+    // Método para reiniciar el estado utilizado del monstruo
+    reiniciar() {
+        this.usado = false;
+    }
 }
 
 //Definición de la clase Jugador
@@ -41,14 +46,14 @@ class Jugador {
 }
 
 // Función para obtener un monstruo aleatorio
-function monstruoAleatorio(arrayMonstruo) {
+const monstruoAleatorio = (arrayMonstruo) => {
     if (arrayMonstruo.length === 0) {
         console.log("El array de monstruos está vacío.");
         return null;
     }
     const index = Math.floor(Math.random() * arrayMonstruo.length);
     return arrayMonstruo[index];
-}
+};
 
 // Función para elegir un monstruo, solicitando la entrada del usuario
 function elegirMonstruo() {
@@ -87,9 +92,9 @@ let jugadorActual = jugador1;
 
 
 // Función para cambiar el turno entre jugadores
-function cambiarTurno() {
-    jugadorActual = jugadorActual === jugador1 ? jugador2 : jugador1;
-}
+const cambiarTurno = () => {
+    jugadorActual = (jugadorActual === jugador1) ? jugador2 : jugador1;
+};
 
 // Función para iniciar el juego
 function inicioJuego() {
@@ -120,6 +125,7 @@ function inicioJuego() {
 
 // Función para reiniciar el juego
 function reinicioJuego() {
+    monstruos.forEach(monstruo => monstruo.reiniciar()); // Reinicia el estado de todos los monstruos
     jugador1 = new Jugador(prompt("Ingrese su nombre"));
     jugador2 = new Jugador("Computadora");
     jugadorActual = jugador1;
