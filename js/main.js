@@ -64,21 +64,21 @@ let turnoJugadorAntesDeSalir = true;
 
 // Arreglo de monstruos disponibles
 let monstruos = [
-    new Monstruo("Osac", 85, 20, "../img/Osac.jfif"),
-    new Monstruo("Iron", 90, 27, "../img/Iron.jfif"),
-    new Monstruo("Chan", 100, 25, "../img/Chan.jfif"),
-    new Monstruo("Verto", 75, 28, "../img/Verto.jfif"),
-    new Monstruo("Guz", 110, 40, "../img/Guz.jfif"),
-    new Monstruo("Trist", 95, 22, "../img/Trist.jfif"),
-    new Monstruo("Hydra", 120, 35, "../img/Hydra.jfif"),
-    new Monstruo("Flareon", 80, 30, "../img/Flareon.jfif"),
-    new Monstruo("Jich", 105, 32, "../img/Jich.jfif"),
-    new Monstruo("Kank", 95, 25, "../img/Kank.jfif"),
-    new Monstruo("Spritz", 115, 38, "../img/Spritz.jfif"),
-    new Monstruo("Kanto", 100, 30, "../img/Kanto.jfif"),
-    new Monstruo("Arnond", 125, 45, "../img/Arnond.jfif"),
-    new Monstruo("Chinjo", 110, 35, "../img/Chinjo.jfif"),
-    new Monstruo("Transion", 105, 45, "../img/Transion.jfif")
+    new Monstruo("Osac", 85, 20, "img/Osac.jfif"),
+    new Monstruo("Iron", 90, 27, "img/Iron.jfif"),
+    new Monstruo("Chan", 100, 25, "img/Chan.jfif"),
+    new Monstruo("Verto", 75, 28, "img/Verto.jfif"),
+    new Monstruo("Guz", 110, 40, "img/Guz.jfif"),
+    new Monstruo("Trist", 95, 22, "img/Trist.jfif"),
+    new Monstruo("Hydra", 120, 35, "img/Hydra.jfif"),
+    new Monstruo("Flareon", 80, 30, "img/Flareon.jfif"),
+    new Monstruo("Jich", 105, 32, "img/Jich.jfif"),
+    new Monstruo("Kank", 95, 25, "img/Kank.jfif"),
+    new Monstruo("Spritz", 115, 38, "img/Spritz.jfif"),
+    new Monstruo("Kanto", 100, 30, "img/Kanto.jfif"),
+    new Monstruo("Arnond", 125, 45, "img/Arnond.jfif"),
+    new Monstruo("Chinjo", 110, 35, "img/Chinjo.jfif"),
+    new Monstruo("Transion", 105, 45, "img/Transion.jfif")
 ];
 
 // Evento de clic al botón "Reiniciar Juego"
