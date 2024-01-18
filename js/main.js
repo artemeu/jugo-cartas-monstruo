@@ -106,19 +106,17 @@ document.querySelector("#accept-btn").addEventListener("click", function () {
     // Obtener el nombre del jugador desde el input
     const playerName = document.querySelector("#player-name").value;
     // Verificar si se ingresó un nombre
-    if (playerName.trim() !== "") {
-        jugador1.nombre = playerName;
-        actualizarVidaEnDOM();
-        mostrarElementosIniciales();
-        document.querySelector("#name-input-container").style.display = "none";
-        document.querySelector("#monsters-container").style.display = "flex";
-        document.querySelector("#attack-btn").style.display = "inline-block";
-        cargarMonstruos();
-        mostrarMensaje("");
-        cargarEstadoJuego();
-    } else {
-        mostrarMensaje("Por favor, ingrese su nombre antes de comenzar el juego.");
-    }
+    playerName.trim() !== ""
+        ? (jugador1.nombre = playerName,
+            actualizarVidaEnDOM(),
+            mostrarElementosIniciales(),
+            document.querySelector("#name-input-container").style.display = "none",
+            document.querySelector("#monsters-container").style.display = "flex",
+            document.querySelector("#attack-btn").style.display = "inline-block",
+            cargarMonstruos(),
+            mostrarMensaje(""),
+            cargarEstadoJuego())
+        : mostrarMensaje("Por favor, ingrese su nombre antes de comenzar el juego.");
 });
 
 // event listener al documento para capturar clics en cualquier parte de la página
@@ -146,8 +144,8 @@ function asignarMonstruoComputadora(computerMonster) {
 // Función para mostrar el mensaje de inicio del turno del jugador actual
 function mostrarMensajeInicioTurno() {
     const battleInfoElement = document.querySelector("#battle-info");
-    battleInfoElement.innerText = `Turno de ${jugador1.nombre} - ${jugador1.monstruo.nombre}`;
-    battleInfoElement.innerText += `\n${jugador1.nombre} ha elegido a ${jugador1.monstruo.nombre}. ¡Listo para la batalla!`;
+    battleInfoElement.innerText = `Turno de ${jugador1.nombre} - ${jugador1.monstruo ? jugador1.monstruo.nombre : 'Sin monstruo'}`;
+    battleInfoElement.innerText += `\n${jugador1.nombre} ha elegido a ${jugador1.monstruo ? jugador1.monstruo.nombre : 'ningún monstruo'}. ¡Listo para la batalla!`;
 };
 
 // Función para ocultar el contenedor del nombre y mostrar el contenedor de monstruos
@@ -228,7 +226,7 @@ function seleccionAleatoria() {
 
 // Función para elegir un monstruo, permitiendo seleccionar solo una carta a la vez
 function elegirMonstruo(cartaMonstruo) {
-    const battleInfoElement = document.querySelector("#battle-info");  
+    const battleInfoElement = document.querySelector("#battle-info");
     // Verifica si la carta ya ha sido utilizada por el jugador1
     if (cartaMonstruo.classList.contains("used")) {
         battleInfoElement.innerText = "Esta carta ya fue utilizada. Por favor, elige otra.";
@@ -290,53 +288,40 @@ function inicioJuego() {
         return;
     }
     const computerMonster = seleccionAleatoria();
-    if (computerMonster) {
-        asignarMonstruoComputadora(computerMonster);
-        jugador1.monstruo.ataque(jugador2.monstruo, jugador2);
-        // Restablecer el estado utilizado del monstruo del jugador1
-        jugador1.monstruo.reiniciar();
-        // Añadir la clase "used" a la carta del monstruo del jugador1
-        document.querySelector(`[data-nombre="${jugador1.monstruo.nombre}"]`).classList.add("used");
-        actualizarVidaEnDOM();
-        mostrarEstadoComputadora(computerMonster);
-        cambiarTurno();
-        // Oculta el botón de ataque y muestra el botón de siguiente turno
-        document.querySelector("#attack-btn").style.display = "none";
-        document.querySelector("#next-turn-btn").style.display = "inline-block";
-        // Oculta el contenedor del nombre y muestra el contenedor de monstruos
-        ocultarInputInicio();
-        // Llama a verificarFinDelJuego después de realizar las acciones del turno
-        verificarFinDelJuego();
-        turnoJugadorAntesDeSalir = false;
-        guardarEstadoJuego();
-    } else {
-        console.log("No hay monstruos disponibles para la computadora.");
-        monstruoNoDisponible();
-    }
+    computerMonster
+        ? (asignarMonstruoComputadora(computerMonster),
+            jugador1.monstruo.ataque(jugador2.monstruo, jugador2),
+            jugador1.monstruo.reiniciar(),
+            document.querySelector(`[data-nombre="${jugador1.monstruo.nombre}"]`).classList.add("used"),
+            actualizarVidaEnDOM(),
+            mostrarEstadoComputadora(computerMonster),
+            cambiarTurno(),
+            (document.querySelector("#attack-btn").style.display = "none"),
+            (document.querySelector("#next-turn-btn").style.display = "inline-block"),
+            ocultarInputInicio(),
+            verificarFinDelJuego(),
+            (turnoJugadorAntesDeSalir = false),
+            guardarEstadoJuego())
+        : (console.log("No hay monstruos disponibles para la computadora."), monstruoNoDisponible());
 };
 
 // Función para el turno de la Computadora
 function turnoComputadora() {
     const computerMonster = seleccionAleatoria();
-    if (computerMonster) {
-        console.log(`Monstruo seleccionado para la computadora: ${computerMonster.nombre}`);
-        asignarMonstruoComputadora(computerMonster);
-        jugador2.monstruo.ataque(jugador1.monstruo, jugador1);
-        actualizarVidaEnDOM();
-        mostrarEstadoComputadora(computerMonster);
-        cambiarTurno();
-        turnoJugadorAntesDeSalir = true;
-        // Oculta el botón de ataque y muestra el botón de siguiente turno
-        document.querySelector("#attack-btn").style.display = "inline-block";
-        document.querySelector("#next-turn-btn").style.display = "none";
-        // Oculta el contenedor del nombre y muestra el contenedor de monstruos
-        ocultarInputInicio();
-        verificarFinDelJuego();
-        guardarEstadoJuego();
-    } else {
-        console.log("No hay monstruos disponibles para la computadora.");
-        monstruoNoDisponible();
-    }
+    computerMonster
+        ? (console.log(`Monstruo seleccionado para la computadora: ${computerMonster.nombre}`),
+            asignarMonstruoComputadora(computerMonster),
+            jugador2.monstruo.ataque(jugador1.monstruo, jugador1),
+            actualizarVidaEnDOM(),
+            mostrarEstadoComputadora(computerMonster),
+            cambiarTurno(),
+            (turnoJugadorAntesDeSalir = true),
+            (document.querySelector("#attack-btn").style.display = "inline-block"),
+            (document.querySelector("#next-turn-btn").style.display = "none"),
+            ocultarInputInicio(),
+            verificarFinDelJuego(),
+            guardarEstadoJuego())
+        : (console.log("No hay monstruos disponibles para la computadora."), monstruoNoDisponible());
 };
 
 // Función para cambiar al siguiente turno (jugador o computadora)
@@ -348,10 +333,7 @@ function siguienteTurno() {
     }
     // Después de seleccionar, desactivamos el clic en la carta y agregamos la clase "used"
     const selectedCard = document.querySelector(".monster-card.selected");
-    if (selectedCard) {
-        selectedCard.onclick = null;
-        selectedCard.classList.add("used");
-    }
+    selectedCard ? ((selectedCard.onclick = null), selectedCard.classList.add("used")) : null;
     // Continuar con el resto de la lógica del turno
     turnoComputadora();
 };
@@ -407,11 +389,9 @@ function desseleccionarCarta() {
 
 // funcion para determinar quien gano
 function determinarGanador() {
-    if (jugador1.puntosVida <= 0) {
-        return `¡${jugador2.nombre} es el ganador/a!`;
-    } else {
-        return `¡${jugador1.nombre} es el ganador/a!`;
-    }
+    return jugador1.puntosVida <= 0
+        ? `¡${jugador2.nombre} es el ganador/a!`
+        : `¡${jugador1.nombre} es el ganador/a!`;
 };
 
 // funcion para verificar el ganador
@@ -496,14 +476,8 @@ function cargarEstadoJuego() {
         // Restaurar el estado del turno del jugador antes de salir
         turnoJugadorAntesDeSalir = estadoJuego.turnoJugador;
         // Si es el turno del jugador, oculta el botón de siguiente turno y muestra el de ataque
-        if (turnoJugadorAntesDeSalir) {
-            document.querySelector("#next-turn-btn").style.display = "none";
-            document.querySelector("#attack-btn").style.display = "inline-block";
-        } else {
-            // Si es el turno de la computadora, oculta el botón de ataque y muestra el de siguiente turno
-            document.querySelector("#attack-btn").style.display = "none";
-            document.querySelector("#next-turn-btn").style.display = "inline-block";
-        }
+        document.querySelector("#next-turn-btn").style.display = turnoJugadorAntesDeSalir ? "none" : "inline-block";
+        document.querySelector("#attack-btn").style.display = turnoJugadorAntesDeSalir ? "inline-block" : "none";
         // Actualizar la vista de vida en el DOM
         actualizarVidaEnDOM();
     }
