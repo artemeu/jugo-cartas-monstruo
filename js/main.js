@@ -64,21 +64,21 @@ let turnoJugadorAntesDeSalir = true;
 
 // Arreglo de monstruos disponibles
 let monstruos = [
-    new Monstruo("Osac", 85, 20, "img/Osac.jfif"),
-    new Monstruo("Iron", 90, 27, "img/Iron.jfif"),
-    new Monstruo("Chan", 100, 25, "img/Chan.jfif"),
-    new Monstruo("Verto", 75, 28, "img/Verto.jfif"),
-    new Monstruo("Guz", 110, 40, "img/Guz.jfif"),
-    new Monstruo("Trist", 95, 22, "img/Trist.jfif"),
-    new Monstruo("Hydra", 120, 35, "img/Hydra.jfif"),
-    new Monstruo("Flareon", 80, 30, "img/Flareon.jfif"),
-    new Monstruo("Jich", 105, 32, "img/Jich.jfif"),
-    new Monstruo("Kank", 95, 25, "img/Kank.jfif"),
-    new Monstruo("Spritz", 115, 38, "img/Spritz.jfif"),
-    new Monstruo("Kanto", 100, 30, "img/Kanto.jfif"),
-    new Monstruo("Arnond", 125, 45, "img/Arnond.jfif"),
-    new Monstruo("Chinjo", 110, 35, "img/Chinjo.jfif"),
-    new Monstruo("Transion", 105, 45, "img/Transion.jfif")
+    new Monstruo("Osac", 85, 20, "img/Osac.jpg"),
+    new Monstruo("Iron", 90, 27, "img/Iron.jpg"),
+    new Monstruo("Chan", 100, 25, "img/Chan.jpg"),
+    new Monstruo("Verto", 75, 28, "img/Verto.jpg"),
+    new Monstruo("Guz", 110, 40, "img/Guz.jpg"),
+    new Monstruo("Trist", 95, 22, "img/Trist.jpg"),
+    new Monstruo("Hydra", 120, 35, "img/Hydra.jpg"),
+    new Monstruo("Flareon", 80, 30, "img/Flareon.jpg"),
+    new Monstruo("Jich", 105, 32, "img/Jich.jpg"),
+    new Monstruo("Kank", 95, 25, "img/Kank.jpg"),
+    new Monstruo("Spritz", 115, 38, "img/Spritz.jpg"),
+    new Monstruo("Kanto", 100, 30, "img/Kanto.jpg"),
+    new Monstruo("Arnond", 125, 45, "img/Arnond.jpg"),
+    new Monstruo("Chinjo", 110, 35, "img/Chinjo.jpg"),
+    new Monstruo("Transion", 105, 45, "img/Transion.jpg")
 ];
 
 // Evento de clic al botón "Reiniciar Juego"
@@ -116,7 +116,7 @@ document.querySelector("#accept-btn").addEventListener("click", function () {
             cargarMonstruos(),
             mostrarMensaje(""),
             cargarEstadoJuego())
-        : mostrarMensaje("Por favor, ingrese su nombre antes de comenzar el juego.");
+        : (mostrarMensaje("Por favor, ingrese su nombre antes de comenzar el juego."))
 });
 
 // event listener al documento para capturar clics en cualquier parte de la página
@@ -138,7 +138,6 @@ document.addEventListener("click", function (event) {
 // Función para asignar el monstruo elegido a la computadora
 function asignarMonstruoComputadora(computerMonster) {
     jugador2.monstruo = computerMonster;
-    console.log(`Monstruo asignado a la computadora: ${computerMonster.nombre}`);
 };
 
 // Función para mostrar el mensaje de inicio del turno del jugador actual
@@ -157,13 +156,12 @@ function ocultarInputInicio() {
 // Función para mostrar un mensaje si no hay monstruos disponibles para la computadora
 function monstruoNoDisponible() {
     const battleInfoElement = document.querySelector("#computer-monster-info");
-    document.querySelector("#battle-info").innerText = "No hay monstruos disponibles para la computadora.";
+    battleInfoElement.innerText = "No hay monstruos disponibles para la computadora.";
 };
 
 // Función para obtener un monstruo aleatorio
 const monstruoAleatorio = (arrayMonstruo) => {
     if (!arrayMonstruo.length) {
-        console.log("El array de monstruos está vacío.");
         return null;
     }
     const index = Math.floor(Math.random() * arrayMonstruo.length);
@@ -217,7 +215,6 @@ function actualizarVidaEnDOM() {
 function seleccionAleatoria() {
     const availableMonsters = monstruos.filter(monstruo => !monstruo.usado);
     if (availableMonsters.length === 0) {
-        console.log("No hay monstruos disponibles para la computadora.");
         return null;
     }
     const computerMonster = monstruoAleatorio(availableMonsters);
@@ -270,9 +267,7 @@ function cargarMonstruos() {
 
 // Función para cambiar el turno entre jugadores
 function cambiarTurno() {
-    console.log("Cambiando turno a:", jugadorActual.nombre);
     jugadorActual = (jugadorActual === jugador1) ? jugador2 : jugador1;
-    console.log("Turno cambiado a:", jugadorActual.nombre);
 };
 
 // Función para iniciar el juego
@@ -289,7 +284,8 @@ function inicioJuego() {
     }
     const computerMonster = seleccionAleatoria();
     computerMonster
-        ? (asignarMonstruoComputadora(computerMonster),
+        ? (
+            asignarMonstruoComputadora(computerMonster),
             jugador1.monstruo.ataque(jugador2.monstruo, jugador2),
             jugador1.monstruo.reiniciar(),
             document.querySelector(`[data-nombre="${jugador1.monstruo.nombre}"]`).classList.add("used"),
@@ -302,14 +298,14 @@ function inicioJuego() {
             verificarFinDelJuego(),
             (turnoJugadorAntesDeSalir = false),
             guardarEstadoJuego())
-        : (console.log("No hay monstruos disponibles para la computadora."), monstruoNoDisponible());
+        : (monstruoNoDisponible())
 };
 
 // Función para el turno de la Computadora
 function turnoComputadora() {
     const computerMonster = seleccionAleatoria();
     computerMonster
-        ? (console.log(`Monstruo seleccionado para la computadora: ${computerMonster.nombre}`),
+        ? (
             asignarMonstruoComputadora(computerMonster),
             jugador2.monstruo.ataque(jugador1.monstruo, jugador1),
             actualizarVidaEnDOM(),
@@ -321,7 +317,7 @@ function turnoComputadora() {
             ocultarInputInicio(),
             verificarFinDelJuego(),
             guardarEstadoJuego())
-        : (console.log("No hay monstruos disponibles para la computadora."), monstruoNoDisponible());
+        : (monstruoNoDisponible())
 };
 
 // Función para cambiar al siguiente turno (jugador o computadora)
