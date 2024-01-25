@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Monstruos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -14,6 +16,17 @@
         <div id="player1-life" class="player-life"></div>
         <div id="player2-life" class="player-life"></div>
     </section>
+
+    <button id="attack-btn" class="btn">Atacar</button>
+    <button id="next-turn-btn" class="btn">Siguiente Turno</button>
+    <div id="computer-monster-info" class="battle-info"></div>
+    <div id="monsters-container" class="monsters-container"></div>
+
+    <section class="btn-finalizar">
+        <button id="restart-btn" class="btn">Reiniciar Juego</button>
+        <button id="exit-btn" class="btn">Salir</button>
+    </section>
+
     <section class="seccion-input">
         <div id="name-input-container" class="name-input-container">
             <label for="player-name">Ingresa su nombre para empezar a jugar</label>
@@ -31,17 +44,8 @@
         </div>
     </section>
 
-    <div id="monsters-container" class="monsters-container"></div>
-    <div id="battle-info" class="battle-info"></div>
-    <div id="computer-monster-info" class="battle-info"></div>
-
-    <button id="attack-btn" class="btn">Atacar</button>
-    <button id="next-turn-btn" class="btn">Siguiente Turno</button>
-    <section class="btn-finalizar">
-        <button id="restart-btn" class="btn">Reiniciar Juego</button>
-        <button id="exit-btn" class="btn">Salir</button>
-    </section>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="./js/main.js"></script>
 </body>
 

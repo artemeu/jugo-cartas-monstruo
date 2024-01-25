@@ -1,0 +1,17 @@
+[
+    {"nombre": "Osac", "puntosAtaque": 85, "puntosDefensa": 20, "imagen": "img/Osac.jpg"},
+    {"nombre": "Iron", "puntosAtaque": 90, "puntosDefensa": 27, "imagen": "img/Iron.jpg"},
+    {"nombre": "Chan", "puntosAtaque": 100, "puntosDefensa": 25, "imagen": "img/Chan.jpg"},
+    {"nombre": "Verto", "puntosAtaque": 75, "puntosDefensa": 28, "imagen": "img/Verto.jpg"},
+    {"nombre": "Guz", "puntosAtaque": 110, "puntosDefensa": 40, "imagen": "img/Guz.jpg"},
+    {"nombre": "Trist", "puntosAtaque": 95, "puntosDefensa": 22, "imagen": "img/Trist.jpg"},
+    {"nombre": "Hydra", "puntosAtaque": 120, "puntosDefensa": 35, "imagen": "img/Hydra.jpg"},
+    {"nombre": "Flareon", "puntosAtaque": 80, "puntosDefensa": 30, "imagen": "img/Flareon.jpg"},
+    {"nombre": "Jich", "puntosAtaque": 105, "puntosDefensa": 32, "imagen": "img/Jich.jpg"},
+    {"nombre": "Kank", "puntosAtaque": 95, "puntosDefensa": 25, "imagen": "img/Kank.jpg"},
+    {"nombre": "Spritz", "puntosAtaque": 115, "puntosDefensa": 38, "imagen": "img/Spritz.jpg"},
+    {"nombre": "Kanto", "puntosAtaque": 100, "puntosDefensa": 30, "imagen": "img/Kanto.jpg"},
+    {"nombre": "Arnond", "puntosAtaque": 125, "puntosDefensa": 45, "imagen": "img/Arnond.jpg"},
+    {"nombre": "Chinjo", "puntosAtaque": 110, "puntosDefensa": 35, "imagen": "img/Chinjo.jpg"},
+    {"nombre": "Transion", "puntosAtaque": 105, "puntosDefensa": 45, "imagen": "img/Transion.jpg"}
+]

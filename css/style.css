@@ -180,24 +180,13 @@ li {
 
 #computer-monster-info {
     display: none;
-    background-color: #ddd;
     padding: 5px;
     margin-top: 10px;
     border: 2px solid #666;
     border-radius: 8px;
     font-weight: bold;
-    color: #333;
-}
-
-.battle-info {
-    text-align: center;
-    padding: 20px;
-    background-color: #3498db;
-    color: #fff;
-    margin-top: 20px;
-    border-radius: 8px;
-    font-size: 18px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    color: white;
+    background: linear-gradient(to right, #2da327, #18e211);
 }
 
 button {

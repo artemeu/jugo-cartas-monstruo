@@ -1,15 +1,14 @@
 // Definición de la clase Monstruo
 class Monstruo {
-    constructor(nombre, puntosAtaque, puntosDefensa, imagen) {
-        this.nombre = nombre;
-        this.puntosAtaque = puntosAtaque;
-        this.puntosDefensa = puntosDefensa;
-        this.imagen = imagen;
+    constructor(monstruoInfo) {
+        this.nombre = monstruoInfo.nombre;
+        this.puntosAtaque = monstruoInfo.puntosAtaque;
+        this.puntosDefensa = monstruoInfo.puntosDefensa;
+        this.imagen = monstruoInfo.imagen;
         this.usado = false; // Indica si el monstruo ha sido utilizado en un turno
     }
     // Método para que un monstruo ataque a otro
     ataque(cartaMonstruo, jugadorAtacado) {
-        const battleInfoElement = document.querySelector("#battle-info");
         // Hacer una copia de los objetos antes del ataque
         const monstruoAtacanteOriginal = { ...this };
         const cartaMonstruoOriginal = { ...cartaMonstruo };
@@ -22,17 +21,17 @@ class Monstruo {
             // Restaurar los objetos originales después del ataque
             Object.assign(this, monstruoAtacanteOriginal);
             Object.assign(cartaMonstruo, cartaMonstruoOriginal);
-            // Mensaje de ataque en battle-info
-            battleInfoElement.innerText = `${this.nombre} ataca a ${cartaMonstruo.nombre} infligiendo ${dano} puntos de daño.`;
+            // Mensaje de ataque
+            mostrarMensajeAtaque(this, cartaMonstruo, dano);
             actualizarVidaEnDOM();
             // Verificar si alguno de los jugadores ha perdido el juego
             verificarFinDelJuego();
         } else if (this.usado) {
             // Mensaje si el monstruo ya fue utilizado
-            battleInfoElement.innerText = `${this.nombre} ya fue utilizado en este juego.`;
+            mostrarMensajeMonstruoUtilizado(this);
         } else {
             // Mensaje si el monstruo no puede atacar
-            battleInfoElement.innerText = `${this.nombre} no puede atacar, ya que no tiene puntos de ataque.`;
+            mostrarMensajeMonstruoSinAtaque(this);
         }
     }
     // Método para reiniciar el estado utilizado del monstruo y remover la clase "used" de la carta
@@ -61,28 +60,19 @@ let jugador1 = new Jugador(""); // El nombre se asignará más tarde
 let jugador2 = new Jugador("Computadora");
 let jugadorActual = jugador1;
 let turnoJugadorAntesDeSalir = true;
+//Declara mounstruos global para el uso en todo el codigo
+let monstruos;
 
-// Arreglo de monstruos disponibles
-let monstruos = [
-    new Monstruo("Osac", 85, 20, "img/Osac.jpg"),
-    new Monstruo("Iron", 90, 27, "img/Iron.jpg"),
-    new Monstruo("Chan", 100, 25, "img/Chan.jpg"),
-    new Monstruo("Verto", 75, 28, "img/Verto.jpg"),
-    new Monstruo("Guz", 110, 40, "img/Guz.jpg"),
-    new Monstruo("Trist", 95, 22, "img/Trist.jpg"),
-    new Monstruo("Hydra", 120, 35, "img/Hydra.jpg"),
-    new Monstruo("Flareon", 80, 30, "img/Flareon.jpg"),
-    new Monstruo("Jich", 105, 32, "img/Jich.jpg"),
-    new Monstruo("Kank", 95, 25, "img/Kank.jpg"),
-    new Monstruo("Spritz", 115, 38, "img/Spritz.jpg"),
-    new Monstruo("Kanto", 100, 30, "img/Kanto.jpg"),
-    new Monstruo("Arnond", 125, 45, "img/Arnond.jpg"),
-    new Monstruo("Chinjo", 110, 35, "img/Chinjo.jpg"),
-    new Monstruo("Transion", 105, 45, "img/Transion.jpg")
-];
-
-// Evento de clic al botón "Reiniciar Juego"
-document.querySelector("#restart-btn").addEventListener("click", reinicioJuego);
+// Obtén el archivo JSON usando fetch
+fetch('js/monstruos.json')
+    .then(response => response.json())
+    .then(monstruosData => {
+        // Convierte cada objeto de monstruo en una instancia de la clase Monstruo
+        monstruos = monstruosData.map(monstruoData => new Monstruo(monstruoData));
+        // Cargar monstruos en la página
+        cargarMonstruos(monstruos);
+    })
+    .catch(error => console.error('Error al cargar los monstruos:', error));
 
 // Evento de clic al botón "Atacar"
 document.querySelector("#attack-btn").addEventListener("click", function () {
@@ -94,7 +84,7 @@ document.querySelector("#next-turn-btn").addEventListener("click", function () {
     // Agregar la validación para asegurarse de que el jugador1 haya seleccionado una carta
     const cartaSeleccionada = document.querySelector(".monster-card.selected");
     if (!cartaSeleccionada) {
-        mostrarMensaje("Por favor, selecciona un monstruo antes de continuar.");
+        mensajeMounstro("Por favor, selecciona un monstruo antes de continuar.");
         return;
     }
     // Cambiar al siguiente turno
@@ -104,19 +94,18 @@ document.querySelector("#next-turn-btn").addEventListener("click", function () {
 // Evento de clic al botón "Aceptar"
 document.querySelector("#accept-btn").addEventListener("click", function () {
     // Obtener el nombre del jugador desde el input
-    const playerName = document.querySelector("#player-name").value;
+    const playerName = document.querySelector("#player-name").value.trim();
     // Verificar si se ingresó un nombre
-    playerName.trim() !== ""
-        ? (jugador1.nombre = playerName,
-            actualizarVidaEnDOM(),
-            mostrarElementosIniciales(),
-            document.querySelector("#name-input-container").style.display = "none",
-            document.querySelector("#monsters-container").style.display = "flex",
-            document.querySelector("#attack-btn").style.display = "inline-block",
-            cargarMonstruos(),
-            mostrarMensaje(""),
-            cargarEstadoJuego())
-        : (mostrarMensaje("Por favor, ingrese su nombre antes de comenzar el juego."))
+    if (playerName !== "") {
+        jugador1.nombre = playerName;
+        actualizarVidaEnDOM();
+        mostrarElementosIniciales();
+        btnAceptar();
+        cargarMonstruos(monstruos);
+        cargarEstadoJuego();
+    } else {
+        mostrarMensaje("Por favor, ingrese su nombre antes de comenzar el juego.");
+    }
 });
 
 // event listener al documento para capturar clics en cualquier parte de la página
@@ -140,11 +129,90 @@ function asignarMonstruoComputadora(computerMonster) {
     jugador2.monstruo = computerMonster;
 };
 
+// Funcion para el manejo despues de hacer click en aceptar
+function btnAceptar() {
+    document.querySelector("#name-input-container").style.display = "none";
+    document.querySelector("#monsters-container").style.display = "flex";
+    document.querySelector("#attack-btn").style.display = "inline-block"
+};
+
 // Función para mostrar el mensaje de inicio del turno del jugador actual
 function mostrarMensajeInicioTurno() {
-    const battleInfoElement = document.querySelector("#battle-info");
-    battleInfoElement.innerText = `Turno de ${jugador1.nombre} - ${jugador1.monstruo ? jugador1.monstruo.nombre : 'Sin monstruo'}`;
-    battleInfoElement.innerText += `\n${jugador1.nombre} ha elegido a ${jugador1.monstruo ? jugador1.monstruo.nombre : 'ningún monstruo'}. ¡Listo para la batalla!`;
+    const mensaje = jugador1.monstruo
+        ? `Turno de ${jugador1.nombre} - ${jugador1.monstruo.nombre}. ¡Listo para la batalla!`
+        : `Turno de ${jugador1.nombre} - Sin monstruo seleccionado. ¡Prepárate para la batalla!`;
+
+    Toastify({
+        text: mensaje,
+        duration: 3000,
+        gravity: "top",
+        position: "left",
+        style: {
+            background: "linear-gradient(to right, #ff5733, #ffbd33)",
+        },
+    }).showToast();
+};
+
+// Función para mostrar mensajes de ataque
+function mostrarMensajeAtaque(monstruoAtacante, cartaMonstruo, dano) {
+    mostrarMensaje(`${monstruoAtacante.nombre} ataca a ${cartaMonstruo.nombre} infligiendo ${dano} puntos de daño.`);
+};
+
+// Función para mostrar mensaje de monstruo utilizado
+function mostrarMensajeMonstruoUtilizado(monstruo) {
+    mostrarMensaje(`${monstruo.nombre} ya fue utilizado en este juego.`);
+};
+
+// Función para mostrar mensaje de monstruo sin puntos de ataque
+function mostrarMensajeMonstruoSinAtaque(monstruo) {
+    mostrarMensaje(`${monstruo.nombre} no puede atacar, ya que no tiene puntos de ataque.`);
+};
+
+// Función para mostrar el estado del monstruo de la computadora
+function mostrarEstadoComputadora(computerMonster) {
+    const computerMonsterInfo = document.querySelector("#computer-monster-info");
+    computerMonsterInfo.innerText = `Monstruo de la Computadora - ${computerMonster.nombre}\n`;
+    computerMonsterInfo.innerText += `Puntos de Ataque: ${computerMonster.puntosAtaque}\n`;
+    computerMonsterInfo.innerText += `Puntos de Defensa: ${computerMonster.puntosDefensa}\n`;
+};
+
+// Función para mostrar mensajes
+function mostrarMensaje(mensaje) {
+    Toastify({
+        text: mensaje,
+        duration: 3000,
+        gravity: "top",
+        position: "left",
+        style: {
+            background: "linear-gradient(to right, #2d62fd, #22c1c3)",
+        },
+    }).showToast();
+};
+
+// Función para mostrar mensajes de mounstro ya utilizado
+function mostrarMensajeMounstro(mensaje) {
+    Toastify({
+        text: mensaje,
+        duration: 3000,
+        gravity: "top",
+        position: "left",
+        style: {
+            background: "linear-gradient(to right, #ff6600, #ffcc00)",
+        },
+    }).showToast();
+};
+
+// Función para mostrar mensajes mounstro no seleccionado
+function mensajeMounstro(mensaje) {
+    Toastify({
+        text: mensaje,
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+        style: {
+            background: "linear-gradient(to right, #2da327, #18e211)",
+        },
+    }).showToast();
 };
 
 // Función para ocultar el contenedor del nombre y mostrar el contenedor de monstruos
@@ -168,17 +236,10 @@ const monstruoAleatorio = (arrayMonstruo) => {
     return arrayMonstruo[index];
 };
 
-// Función para mostrar mensajes en el elemento battle-info
-function mostrarMensaje(mensaje) {
-    const battleInfoElement = document.querySelector("#battle-info");
-    battleInfoElement.innerText = mensaje;
-};
-
 // Función para mostrar elementos ocultos al principio
 function mostrarElementosIniciales() {
     document.getElementById('player1-life').style.display = 'inline-block';
     document.getElementById('player2-life').style.display = 'inline-block';
-    document.getElementById('battle-info').style.display = 'block';
     document.getElementById('computer-monster-info').style.display = 'block';
 };
 
@@ -195,14 +256,6 @@ function ocultarElementos() {
 // Función para actualizar los elementos del DOM con el nombre del jugador1
 function actualizarNombreJugador1() {
     document.getElementById('player1-life').innerText = `${jugador1.nombre} HP: ${jugador1.puntosVida}`;
-};
-
-// Función para mostrar el estado del monstruo de la computadora
-function mostrarEstadoComputadora(computerMonster) {
-    const computerMonsterInfo = document.querySelector("#computer-monster-info");
-    computerMonsterInfo.innerText = `Monstruo de la Computadora - ${computerMonster.nombre}\n`;
-    computerMonsterInfo.innerText += `Puntos de Ataque: ${computerMonster.puntosAtaque}\n`;
-    computerMonsterInfo.innerText += `Puntos de Defensa: ${computerMonster.puntosDefensa}\n`;
 };
 
 // Después de una batalla exitosa, actualiza la vida de los jugadores en el DOM
@@ -223,10 +276,9 @@ function seleccionAleatoria() {
 
 // Función para elegir un monstruo, permitiendo seleccionar solo una carta a la vez
 function elegirMonstruo(cartaMonstruo) {
-    const battleInfoElement = document.querySelector("#battle-info");
     // Verifica si la carta ya ha sido utilizada por el jugador1
     if (cartaMonstruo.classList.contains("used")) {
-        battleInfoElement.innerText = "Esta carta ya fue utilizada. Por favor, elige otra.";
+        mostrarMensajeMounstro("Esta carta ya fue utilizada. Por favor, elige otra.");
         return;
     }
     // Desselecciona la carta previamente seleccionada (si hay alguna)
@@ -237,22 +289,18 @@ function elegirMonstruo(cartaMonstruo) {
     const nombreMonstruo = cartaMonstruo.getAttribute("data-nombre");
     const monstruoElegido = monstruos.find(monstruo => monstruo.nombre === nombreMonstruo);
     if (monstruoElegido?.usado) {
-        // Mensaje si el monstruo ya fue utilizado utilizando el operador de encadenamiento opcional
-        battleInfoElement.innerText = `${monstruoElegido.nombre} ya fue utilizado en este juego.`;
+        mostrarMensajeMounstro(`${monstruoElegido.nombre} ya fue utilizado en este juego.`);
     } else if (monstruoElegido) {
-        // Asigna el monstruo elegido al jugador actual
         jugador1.monstruo = monstruoElegido;
-        // Agrega la clase "selected" a la cartaMonstruo seleccionada
         cartaMonstruo.classList.add("selected");
         mostrarMensajeInicioTurno();
     } else {
-        // Mensaje si el monstruo no es válido
-        battleInfoElement.innerText = "Monstruo no válido o ya fue utilizado. Inténtalo de nuevo.";
+        mostrarMensajeMounstro("Monstruo no válido o ya fue utilizado. Inténtalo de nuevo.");
     }
 };
 
 // Función para cargar los monstruos en el elemento div del DOM
-function cargarMonstruos() {
+function cargarMonstruos(monstruos) {
     const monstersContainer = document.querySelector("#monsters-container");
     const monstruoHTML = monstruos.map(monstruo => `
         <div class="monster-card" data-nombre="${monstruo.nombre}" onclick="elegirMonstruo(this)">
@@ -273,13 +321,13 @@ function cambiarTurno() {
 // Función para iniciar el juego
 function inicioJuego() {
     if (!jugador1.monstruo) {
-        mostrarMensaje("Por favor, selecciona un monstruo antes de comenzar el juego.");
+        mensajeMounstro("Por favor, selecciona un monstruo antes de comenzar el juego.");
         return;
     }
     // Agregar la validación para asegurarse de que el jugador1 haya seleccionado una carta
     const cartaSeleccionada = document.querySelector(".monster-card.selected");
     if (!cartaSeleccionada) {
-        mostrarMensaje("Por favor, selecciona un monstruo antes de continuar.");
+        mensajeMounstro("Por favor, selecciona un monstruo antes de continuar.");
         return;
     }
     const computerMonster = seleccionAleatoria();
@@ -324,7 +372,7 @@ function turnoComputadora() {
 function siguienteTurno() {
     // Verificar si el jugador1 seleccionó un monstruo antes de continuar
     if (jugadorActual === jugador1 && !jugador1.monstruo) {
-        mostrarMensaje("Por favor, selecciona un monstruo antes de continuar.");
+        mensajeMounstro("Por favor, selecciona un monstruo antes de continuar.");
         return;
     }
     // Después de seleccionar, desactivamos el clic en la carta y agregamos la clase "used"
@@ -350,17 +398,13 @@ function reinicioJuego() {
     // Actualiza la vista de vida en el DOM
     actualizarVidaEnDOM();
     // Vuelve a cargar los monstruos en el contenedor
-    cargarMonstruos();
+    cargarMonstruos(monstruos);
     // Oculta el botón de reiniciar y muestra el botón de ataque
     document.querySelector("#attack-btn").style.display = "inline-block";
     document.querySelector("#next-turn-btn").style.display = "none";
     // Oculta el contenedor del nombre y muestra el contenedor de monstruos
     ocultarInputInicio();
     // Limpia cualquier mensaje en el contenedor de información de batalla
-    mostrarMensaje("");
-    // Oculta los botones de reiniciar y salir
-    document.querySelector("#restart-btn").style.display = "none";
-    document.querySelector("#exit-btn").style.display = "none";
     mostrarElementosIniciales();
 };
 
@@ -394,21 +438,43 @@ function determinarGanador() {
 function verificarFinDelJuego() {
     const ganador = determinarGanador();
     if (jugador1.puntosVida <= 0 || jugador2.puntosVida <= 0) {
-        const mensajeFinDelJuego = document.querySelector("#battle-info");
+        // Mostrar SweetAlert2 con el ganador y los botones de salida o reinicio
+        Swal.fire({
+            title: "El juego ha terminado",
+            html: `${ganador}<br>¿Queres volver a jugar?`,
+            icon: "success",
+            iconHtml: `<i class="bi bi-emoji-surprise"></i>`,
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Reiniciar",
+            denyButtonText: "Salir",
+            iconColor: "#85D821"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Reiniciar el juego
+                reinicioJuego();
+            } else if (result.isDenied) {
+                // Salir del juego (puedes realizar acciones adicionales si es necesario)
+                window.location.reload();
+                localStorage.clear();
+            }
+        });
+        // Mostrar los botones adicionales
         const restartBtn = document.querySelector("#restart-btn");
         const exitBtn = document.querySelector("#exit-btn");
         restartBtn.style.display = "inline-block";
         exitBtn.style.display = "inline-block";
+        // Ocultar elementos adicionales si es necesario
         ocultarElementos();
-        mensajeFinDelJuego.innerText = `El juego ha terminado. ${ganador}\n Queres volver a jugar?`;
         // Limpia cualquier mensaje en el contenedor de información del monstruo de la computadora
         document.querySelector("#computer-monster-info").innerText = "";
         // Limpia el contenido de la vida en el DOM
         document.getElementById('player1-life').innerText = "";
         document.getElementById('player2-life').innerText = "";
+        // Añadir eventos a los botones
         restartBtn.addEventListener("click", reinicioJuego);
         exitBtn.addEventListener("click", function () {
-            // Recargar la página para volver al estado inicial
+            // Salir del juego (puedes realizar acciones adicionales si es necesario)
             window.location.reload();
             localStorage.clear();
         });
@@ -478,3 +544,4 @@ function cargarEstadoJuego() {
         actualizarVidaEnDOM();
     }
 };
+
