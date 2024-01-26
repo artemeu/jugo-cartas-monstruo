@@ -1,3 +1,19 @@
+:root {
+    --color-primario: #3498db;
+    --color-fondo: #ecf0f1;
+    --color-texto: #555;
+    --color-botones: #4CAF50;
+    --color-botones-hover: #45a049;
+    --color-btn-finalizar: #2ecc71;
+    --color-btn-finalizar-hover: #27ae60;
+    --color-btn-reiniciar-salir: #ff4d4d;
+    --color-btn-reiniciar-salir-hover: #e63939;
+    --color-btn-aceptar: #3498db;
+    --color-btn-aceptar-hover: #2980b9;
+    --color-btn-monster: #3498db;
+    --color-btn-monster-hover: #2980b9;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,27 +22,27 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #ecf0f1;
+    background-color: var(--color-fondo);
     text-align: center;
-    margin: 0 0 20px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    color: var(--color-texto);
 }
 
 h1 {
     margin-top: 20px;
-    color: #3498db;
+    color: var(--color-primario);
     font-size: 32px;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
 }
 
 p {
     font-size: 18px;
     line-height: 1.6;
-    color: #555;
+    color: var(--color-texto);
     text-align: justify;
     margin-bottom: 20px;
     font-weight: 600;
@@ -37,14 +53,14 @@ ul {
     padding: 10px;
     text-align: justify;
     font-size: 16px;
-    color: #555;
+    color: var(--color-texto);
 }
 
 li {
     margin-bottom: 10px;
 }
 
-.seccion-input{
+.seccion-input {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -73,7 +89,7 @@ li {
     grid-row: 2;
     padding: 10px;
     font-size: 16px;
-    border: 2px solid #3498db;
+    border: 2px solid var(--color-primario);
     border-radius: 5px;
     margin-right: 10px;
     width: 100%;
@@ -82,7 +98,7 @@ li {
 }
 
 .name-input-container input:focus {
-    border-color: #2980b9;
+    border-color: var(--color-btn-aceptar);
     box-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
 }
 
@@ -90,13 +106,13 @@ li {
 .name-input-container input,
 .name-input-container button,
 .name-input-container p {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
 #accept-btn {
     padding: 12px 20px;
     font-size: 16px;
-    background-color: #3498db;
+    background-color: var(--color-btn-aceptar);
     color: white;
     border: none;
     border-radius: 5px;
@@ -106,14 +122,14 @@ li {
 }
 
 #accept-btn:hover {
-    background-color: #2980b9;
+    background-color: var(--color-btn-aceptar-hover);
     color: white;
 }
 
 .player {
     padding: 10px;
     font-size: 16px;
-    border: 2px solid #3498db;
+    border: 2px solid var(--color-primario);
     border-radius: 5px;
     margin-right: 10px;
 }
@@ -131,11 +147,11 @@ li {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 2px solid #3498db;
+    border: 2px solid var(--color-primario);
     border-radius: 10px;
     margin: 10px;
     padding: 15px;
-    background-color: #fff;
+    background-color: white;
     width: 200px;
     box-sizing: border-box;
     text-align: center;
@@ -194,7 +210,7 @@ button {
     margin-top: 10px;
     padding: 12px 20px;
     font-size: 16px;
-    background-color: #4CAF50;
+    background-color: var(--color-botones);
     color: white;
     border: none;
     border-radius: 5px;
@@ -203,7 +219,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: var(--color-botones-hover);
     color: white;
 }
 
@@ -212,7 +228,7 @@ button:hover {
     margin-top: 10px;
     padding: 12px 20px;
     font-size: 16px;
-    background-color: #ff4d4d;
+    background-color: var(--color-btn-reiniciar-salir);
     color: white;
     border: none;
     border-radius: 5px;
@@ -221,22 +237,25 @@ button:hover {
 }
 
 .btn:hover {
-    background-color: #e63939;
+    background-color: var(--color-btn-reiniciar-salir-hover);
     color: white;
 }
 
-#restart-btn, #exit-btn {
-    background-color: #2ecc71;
+#restart-btn,
+#exit-btn {
+    background-color: var(--color-btn-finalizar);
     color: white;
-    border: 2px solid #27ae60;
+    border: 2px solid var(--color-btn-finalizar);
 }
 
-#restart-btn:hover, #exit-btn:hover {
-    background-color: #27ae60;
+#restart-btn:hover,
+#exit-btn:hover {
+    background-color: var(--color-btn-finalizar-hover);
 }
 
 .player-lives-container {
     display: flex;
+    flex-direction: row;
     justify-content: space-around;
     margin: 10px 0;
     gap: 20px;
@@ -246,7 +265,8 @@ button:hover {
     display: none;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 17px;
+    font-weight: 700;
     padding: 10px 20px;
     margin: 15px auto;
     border-radius: 10px;
@@ -257,3 +277,20 @@ button:hover {
     height: 40px;
 }
 
+@media only screen and (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
+    .player-lives-container {
+        flex-direction: column;
+    }
+
+    .player-life {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        max-width: 300px;
+    }
+
+}

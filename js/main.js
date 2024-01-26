@@ -63,6 +63,14 @@ let turnoJugadorAntesDeSalir = true;
 //Declara mounstruos global para el uso en todo el codigo
 let monstruos;
 
+const attackBtn = document.getElementById("attack-btn");
+const nextTurnBtn = document.getElementById("next-turn-btn");
+const restartBtn = document.getElementById("restart-btn");
+const exitBtn = document.getElementById("exit-btn");
+const aceptBtn = document.getElementById("accept-btn");
+const monstersContainer = document.querySelector("#monsters-container");
+
+
 // Obtén el archivo JSON usando fetch
 fetch('js/monstruos.json')
     .then(response => response.json())
@@ -75,12 +83,10 @@ fetch('js/monstruos.json')
     .catch(error => console.error('Error al cargar los monstruos:', error));
 
 // Evento de clic al botón "Atacar"
-document.querySelector("#attack-btn").addEventListener("click", function () {
-    inicioJuego();
-});
+attackBtn.addEventListener("click", inicioJuego);
 
 // Evento de clic al botón "Siguiente Turno"
-document.querySelector("#next-turn-btn").addEventListener("click", function () {
+nextTurnBtn.addEventListener("click", function () {
     // Agregar la validación para asegurarse de que el jugador1 haya seleccionado una carta
     const cartaSeleccionada = document.querySelector(".monster-card.selected");
     if (!cartaSeleccionada) {
@@ -92,7 +98,7 @@ document.querySelector("#next-turn-btn").addEventListener("click", function () {
 });
 
 // Evento de clic al botón "Aceptar"
-document.querySelector("#accept-btn").addEventListener("click", function () {
+aceptBtn.addEventListener("click", function () {
     // Obtener el nombre del jugador desde el input
     const playerName = document.querySelector("#player-name").value.trim();
     // Verificar si se ingresó un nombre
@@ -132,8 +138,8 @@ function asignarMonstruoComputadora(computerMonster) {
 // Funcion para el manejo despues de hacer click en aceptar
 function btnAceptar() {
     document.querySelector("#name-input-container").style.display = "none";
-    document.querySelector("#monsters-container").style.display = "flex";
-    document.querySelector("#attack-btn").style.display = "inline-block"
+    monstersContainer.style.display = "flex";
+    attackBtn.style.display = "inline-block"
 };
 
 // Función para mostrar el mensaje de inicio del turno del jugador actual
@@ -218,7 +224,7 @@ function mensajeMounstro(mensaje) {
 // Función para ocultar el contenedor del nombre y mostrar el contenedor de monstruos
 function ocultarInputInicio() {
     document.querySelector("#name-input-container").style.display = "none";
-    document.querySelector("#monsters-container").style.display = "flex";
+    monstersContainer.style.display = "flex";
 };
 
 // Función para mostrar un mensaje si no hay monstruos disponibles para la computadora
@@ -238,8 +244,8 @@ const monstruoAleatorio = (arrayMonstruo) => {
 
 // Función para mostrar elementos ocultos al principio
 function mostrarElementosIniciales() {
-    document.getElementById('player1-life').style.display = 'inline-block';
-    document.getElementById('player2-life').style.display = 'inline-block';
+    document.getElementById('player1-life').style.display = 'flex';
+    document.getElementById('player2-life').style.display = 'flex';
     document.getElementById('computer-monster-info').style.display = 'block';
 };
 
@@ -248,9 +254,9 @@ function ocultarElementos() {
     document.getElementById('player1-life').style.display = 'none';
     document.getElementById('player2-life').style.display = 'none';
     document.getElementById('computer-monster-info').style.display = 'none';
-    document.querySelector("#attack-btn").style.display = "none";
-    document.querySelector("#next-turn-btn").style.display = "none";
-    document.querySelector("#monsters-container").style.display = "none";
+    attackBtn.style.display = "none";
+    nextTurnBtn.style.display = "none";
+    monstersContainer.style.display = "none";
 };
 
 // Función para actualizar los elementos del DOM con el nombre del jugador1
@@ -301,7 +307,6 @@ function elegirMonstruo(cartaMonstruo) {
 
 // Función para cargar los monstruos en el elemento div del DOM
 function cargarMonstruos(monstruos) {
-    const monstersContainer = document.querySelector("#monsters-container");
     const monstruoHTML = monstruos.map(monstruo => `
         <div class="monster-card" data-nombre="${monstruo.nombre}" onclick="elegirMonstruo(this)">
             <h3 class="monster-info">${monstruo.nombre}</h3>
@@ -340,8 +345,8 @@ function inicioJuego() {
             actualizarVidaEnDOM(),
             mostrarEstadoComputadora(computerMonster),
             cambiarTurno(),
-            (document.querySelector("#attack-btn").style.display = "none"),
-            (document.querySelector("#next-turn-btn").style.display = "inline-block"),
+            (attackBtn.style.display = "none"),
+            (nextTurnBtn.style.display = "inline-block"),
             ocultarInputInicio(),
             verificarFinDelJuego(),
             (turnoJugadorAntesDeSalir = false),
@@ -360,8 +365,8 @@ function turnoComputadora() {
             mostrarEstadoComputadora(computerMonster),
             cambiarTurno(),
             (turnoJugadorAntesDeSalir = true),
-            (document.querySelector("#attack-btn").style.display = "inline-block"),
-            (document.querySelector("#next-turn-btn").style.display = "none"),
+            (attackBtn.style.display = "inline-block"),
+            (nextTurnBtn.style.display = "none"),
             ocultarInputInicio(),
             verificarFinDelJuego(),
             guardarEstadoJuego())
@@ -376,8 +381,8 @@ function siguienteTurno() {
         return;
     }
     // Después de seleccionar, desactivamos el clic en la carta y agregamos la clase "used"
-    const selectedCard = document.querySelector(".monster-card.selected");
-    selectedCard ? ((selectedCard.onclick = null), selectedCard.classList.add("used")) : null;
+    const cartaSeleccionada = document.querySelector(".monster-card.selected");
+    cartaSeleccionada ? ((cartaSeleccionada.onclick = null), cartaSeleccionada.classList.add("used")) : null;
     // Continuar con el resto de la lógica del turno
     turnoComputadora();
 };
@@ -399,9 +404,11 @@ function reinicioJuego() {
     actualizarVidaEnDOM();
     // Vuelve a cargar los monstruos en el contenedor
     cargarMonstruos(monstruos);
-    // Oculta el botón de reiniciar y muestra el botón de ataque
-    document.querySelector("#attack-btn").style.display = "inline-block";
-    document.querySelector("#next-turn-btn").style.display = "none";
+    // Oculta el botón de reiniciar y salir, y muestra el botón de ataque
+    attackBtn.style.display = "inline-block";
+    nextTurnBtn.style.display = "none";
+    restartBtn.style.display = "none";
+    exitBtn.style.display = "none";
     // Oculta el contenedor del nombre y muestra el contenedor de monstruos
     ocultarInputInicio();
     // Limpia cualquier mensaje en el contenedor de información de batalla
@@ -421,9 +428,9 @@ function reiniciarContadoresVida() {
 
 // Función para desseleccionar la carta del jugador1
 function desseleccionarCarta() {
-    const selectedCard = document.querySelector(".monster-card.selected");
-    if (selectedCard) {
-        selectedCard.classList.remove("selected");
+    const cartaSeleccionada = document.querySelector(".monster-card.selected");
+    if (cartaSeleccionada) {
+        cartaSeleccionada.classList.remove("selected");
     }
 };
 
@@ -460,8 +467,6 @@ function verificarFinDelJuego() {
             }
         });
         // Mostrar los botones adicionales
-        const restartBtn = document.querySelector("#restart-btn");
-        const exitBtn = document.querySelector("#exit-btn");
         restartBtn.style.display = "inline-block";
         exitBtn.style.display = "inline-block";
         // Ocultar elementos adicionales si es necesario
@@ -538,10 +543,9 @@ function cargarEstadoJuego() {
         // Restaurar el estado del turno del jugador antes de salir
         turnoJugadorAntesDeSalir = estadoJuego.turnoJugador;
         // Si es el turno del jugador, oculta el botón de siguiente turno y muestra el de ataque
-        document.querySelector("#next-turn-btn").style.display = turnoJugadorAntesDeSalir ? "none" : "inline-block";
-        document.querySelector("#attack-btn").style.display = turnoJugadorAntesDeSalir ? "inline-block" : "none";
+        nextTurnBtn.style.display = turnoJugadorAntesDeSalir ? "none" : "inline-block";
+        attackBtn.style.display = turnoJugadorAntesDeSalir ? "inline-block" : "none";
         // Actualizar la vista de vida en el DOM
         actualizarVidaEnDOM();
     }
 };
-
