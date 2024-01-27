@@ -287,7 +287,6 @@ button:hover {
     }
 
     .player-life {
-        display: flex;
         flex-direction: column;
         width: 80%;
         max-width: 300px;
